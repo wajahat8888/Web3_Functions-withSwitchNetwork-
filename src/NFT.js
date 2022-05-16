@@ -8,7 +8,13 @@ const NFT = ({ web3Obj, userInfo }) => {
   const [id, setId] = useState();
   const [amount, setAmount] = useState();
   const [hash, setHash] = useState("");
+  const [role,setRole] = useState("");
+  // const [msgSender, setMsgSender] = useState({});
 
+  const roleValue = (e) => {
+    setRole(e.target.value);
+   };
+  
   const addressValue = (e) => {
     setAddress(e.target.value);
   };
@@ -29,14 +35,17 @@ const NFT = ({ web3Obj, userInfo }) => {
   const onMint = async (e) => {
     e.preventDefault();
     var methods = new web3Obj.eth.Contract(dataNft.ABI, dataNft.contractAddress)
+    // console.log(address);
+    // console.log(methods);
+    // console.log(hash);
     const result = await methods.methods.mint(address, id, amount, hash).send({
       from: userInfo.account,
     })
     console.log(result)
-    setAddress("");
-    setId("");
-    setAmount("");
-    setHash("");
+    setAddress("")
+    setId("")
+    setAmount("")
+    setHash("")
   };
 
   const returnTokens = async (e) => {
@@ -66,6 +75,48 @@ const NFT = ({ web3Obj, userInfo }) => {
     window.alert(result)
     setAddress("")
   }
+
+  const onGrantRole = async (e) => {
+    e.preventDefault();
+    var methods = new web3Obj.eth.Contract(dataNft.ABI, dataNft.contractAddress)
+    const result = await methods.methods.grantRole(role,address).send({
+      from: userInfo.account,
+    })
+    console.log(result)
+    setRole("");
+    setAddress("");
+  };
+
+  
+  const onRevokeRole = async (e) => {
+    e.preventDefault();
+    var methods = new web3Obj.eth.Contract(dataNft.ABI, dataNft.contractAddress)
+    const result = await methods.methods.revokeRole(role,address).send({
+      from: userInfo.account,
+    })
+    console.log(result)
+    setRole("");
+    setAddress("");
+  };
+
+  const onHasRole = async (e) => {
+    e.preventDefault();
+    var methods = new web3Obj.eth.Contract(dataNft.ABI, dataNft.contractAddress)
+    const result = await methods.methods.hasRole(role,address).call();
+    console.log(result);
+    window.alert(result);
+  };
+
+  const onMinterRole=async(e)=>
+  {
+    e.preventDefault();
+    var methods=new web3Obj.eth.Contract(dataNft.ABI,dataNft.contractAddress)
+    const result=await methods.methods.MINTER_ROLE().call();
+    console.log(result);
+    window.alert(result);
+  }
+
+
 
   return (
     <>
@@ -117,6 +168,52 @@ const NFT = ({ web3Obj, userInfo }) => {
         </div>
         <button className="marginTop">Check</button>
       </form>
+
+
+      <form className="marginTop" onSubmit={onGrantRole}>
+        <div className="app-details">
+          <h5>grantRole Function</h5>
+          <label htmlFor="role">Role</label>
+          <input type="text" value={role} onChange={roleValue} />
+          <br />
+          <label htmlFor="address">Address</label>
+          <input type="text" value={address} onChange={addressValue} />
+        </div>
+        <button className="marginTop">Grant Role</button>
+      </form>
+
+      <form className="marginTop" onSubmit={onRevokeRole}>
+        <div className="app-details">
+          <h5>Revoke Role Function</h5>
+          <label htmlFor="role">Role</label>
+          <input type="text" value={role} onChange={roleValue} />
+          <br />
+          <label htmlFor="address">Address</label>
+          <input type="text" value={address} onChange={addressValue} />
+        </div>
+        <button className="marginTop">Revoke Role</button>
+      </form>
+
+
+      <form className="marginTop" onSubmit={onHasRole}>
+        <div className="app-details">
+          <h5>Has Role Function</h5>
+          <label htmlFor="role">Role</label>
+          <input type="text" value={role} onChange={roleValue} />
+          <br />
+          <label htmlFor="address">Address</label>
+          <input type="text" value={address} onChange={addressValue} />
+        </div>
+        <button className="marginTop">Check Role</button>
+      </form>
+      
+      <form className="marginTop" onSubmit={onMinterRole}>
+        <div className="app-details">
+          <h5>Minter Role</h5>
+        </div>
+        <button className="marginTop">Minter Role details</button>
+      </form>
+
     </>
   );
 };

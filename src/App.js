@@ -50,11 +50,16 @@ function App() {
     try {
       const currentProvider = detectCurrentProvider();
       if (currentProvider) {
+
         if (currentProvider !== window.ethereum) {
           console.log(
             'Non-Ethereum browser detected. You should consider trying MetaMask!'
           );
+         
         }
+
+        
+       
         await currentProvider.request({ method: 'eth_requestAccounts' });
         const web3 = new Web3(currentProvider);
         setweb3Obj(web3)
@@ -67,7 +72,12 @@ function App() {
         if (userAccount.length === 0) {
           console.log('Please connect to metamask');
         }
-      }
+     
+
+
+
+
+    }
     } catch (err) {
       console.log(
         'There was an error fetching your accounts. Make sure your Ethereum client is configured correctly.'

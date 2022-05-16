@@ -131,4 +131,4 @@ const Token = ({ web3Obj, userInfo }) => {
   )
 }
 
-export default Token
+export default Token;
